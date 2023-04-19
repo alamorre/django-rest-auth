@@ -14,7 +14,8 @@ def login(request):
     if not user.check_password(request.data['password']):
         return Response("missing user", status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key}, status=status.HTTP_200_OK)
+    serializer = UserSerializer(user)
+    return Response({'token': token.key, 'user': serializer.data})
 
 @api_view(['POST'])
 def signup(request):
@@ -25,5 +26,5 @@ def signup(request):
         user.set_password(request.data['password'])
         user.save()
         token = Token.objects.create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+        return Response({'token': token.key, 'user': serializer.data})
     return Response(serializer.errors, status=status.HTTP_200_OK)

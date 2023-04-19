@@ -34,5 +34,5 @@ def signup(request):
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def ping():
-    return Response("pong")
+def test_token():
+    return Response("passed!")
